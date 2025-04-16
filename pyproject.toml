@@ -1,0 +1,31 @@
+[project]
+name = "gbp-webhook-tts"
+version = "0.1.0"
+description = "Text-To-Speech gbp-webhook plugin"
+authors = [
+    {name = "Albert Hopkins", email = "marduk@letterboxes.org"},
+]
+dependencies = ["boto3>=1.37.34", "platformdirs>=4.3.7"]
+requires-python = ">=3.12"
+readme = "README.md"
+license = {text = "GPL3+"}
+
+[project.entry-points."gbp_webhook.handlers"]
+build_pulled = "gbp_webhook_tts.handlers:build_pulled"
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool.pdm]
+distribution = true
+
+[dependency-groups]
+dev = [
+    "pylint>=3.3.6",
+    "black>=25.1.0",
+    "isort>=6.0.1",
+    "mypy>=1.15.0",
+    "boto3-stubs>=1.37.34",
+]
