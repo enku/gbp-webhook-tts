@@ -1,10 +1,13 @@
 """gbp-webhook-tts utils"""
 
+import os
 from pathlib import Path
 from typing import Any
 
 import boto3
 import platformdirs
+
+environ = os.environ
 
 
 def acquire_sound_file(event: dict[str, Any]) -> Path:
@@ -27,8 +30,22 @@ def event_to_path(event: dict[str, Any]) -> Path:
 
 def event_to_speech(event: dict[str, Any]) -> bytes:
     """Return .mp3 audio for the given event"""
-    text = event["machine"].replace("-", " ")
+    text = get_speech_text_for_machine(event["machine"])
     polly = boto3.Session().client("polly")
     response = polly.synthesize_speech(VoiceId="Ivy", OutputFormat="mp3", Text=text)
 
     return response["AudioStream"].read()
+
+
+def get_speech_text_for_machine(machine: str) -> str:
+    """Given the machine name, return the text for speech"""
+    return map_machine_to_text(machine) or machine.replace("-", " ")
+
+
+def map_machine_to_text(machine: str) -> str | None:
+    """Return the phonetic pronunciation for machine if defined
+
+    For example if the machine is "kde-desktop", will return the value of the
+    environment variable `GBP_WEBHOOK_TTS_PHONETIC_KDE_DESKTOP`
+    """
+    return environ.get(f"GBP_WEBHOOK_TTS_PHONETIC_{machine.replace('-', '_').upper()}")
