@@ -5,7 +5,7 @@ description = "Text-To-Speech gbp-webhook plugin"
 authors = [
     {name = "Albert Hopkins", email = "marduk@letterboxes.org"},
 ]
-dependencies = ["boto3>=1.37.34", "platformdirs>=4.3.7"]
+dependencies = ["boto3>=1.37.34", "platformdirs>=4.3.7", "Jinja2>=3.1.6"]
 requires-python = ">=3.12"
 readme = "README.md"
 license = {text = "GPL3+"}

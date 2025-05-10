@@ -7,6 +7,8 @@ from typing import Any
 import boto3
 import platformdirs
 
+from gbp_webhook_tts.templates import load_template, render_template
+
 environ = os.environ
 
 
@@ -32,14 +34,21 @@ def event_to_speech(event: dict[str, Any]) -> bytes:
     """Return .mp3 audio for the given event"""
     text = get_speech_text_for_machine(event["machine"])
     polly = boto3.Session().client("polly")
-    response = polly.synthesize_speech(VoiceId="Ivy", OutputFormat="mp3", Text=text)
+    response = polly.synthesize_speech(
+        VoiceId="Ivy", OutputFormat="mp3", Text=text, TextType="ssml"
+    )
 
     return response["AudioStream"].read()
 
 
 def get_speech_text_for_machine(machine: str) -> str:
     """Given the machine name, return the text for speech"""
-    return map_machine_to_text(machine) or machine.replace("-", " ")
+    template = load_template("build_pulled.ssml")
+    context = {
+        "machine": map_machine_to_text(machine) or machine.replace("-", " "),
+        "delay": environ.get("GBP_WEBHOOK_TTS_DELAY", "0"),
+    }
+    return render_template(template, context)
 
 
 def map_machine_to_text(machine: str) -> str | None:
