@@ -8,8 +8,5 @@ from . import utils
 
 def build_pulled(event: dict[str, Any]) -> None:
     """build_pulled event handler"""
-    sound_file = utils.acquire_sound_file(event)
-    args = ["pw-play", str(sound_file)]
-
-    with sp.Popen(args):
+    with sp.Popen([*utils.get_sound_player(), str(utils.acquire_sound_file(event))]):
         pass

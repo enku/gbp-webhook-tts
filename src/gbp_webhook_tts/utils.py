@@ -58,3 +58,8 @@ def map_machine_to_text(machine: str) -> str | None:
     environment variable `GBP_WEBHOOK_TTS_PHONETIC_KDE_DESKTOP`
     """
     return environ.get(f"GBP_WEBHOOK_TTS_PHONETIC_{machine.replace('-', '_').upper()}")
+
+
+def get_sound_player() -> list[str]:
+    """Return the sound player executable"""
+    return os.environ.get("GBP_WEBHOOK_PLAYSOUND_PLAYER", "pw-play").split()
