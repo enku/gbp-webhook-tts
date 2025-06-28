@@ -29,4 +29,5 @@ dev = [
     "isort>=6.0.1",
     "mypy>=1.15.0",
     "boto3-stubs>=1.37.34",
+    "unittest-fixtures>=1.0.0",
 ]
