@@ -25,9 +25,8 @@ def acquire_sound_file(event: dict[str, Any]) -> Path:
 def event_to_path(event: dict[str, Any]) -> Path:
     """Given the path return the pathname of the audio file"""
     machine = event["machine"]
-    dirname = platformdirs.user_cache_path("gbp-webhook") / "tts"
 
-    return dirname / f"{machine}.mp3"
+    return platformdirs.user_cache_path("gbp-webhook") / "tts" / f"{machine}.mp3"
 
 
 def event_to_speech(event: dict[str, Any]) -> bytes:
