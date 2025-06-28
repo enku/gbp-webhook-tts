@@ -1,6 +1,6 @@
 [project]
 name = "gbp-webhook-tts"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Text-To-Speech gbp-webhook plugin"
 authors = [
     {name = "Albert Hopkins", email = "marduk@letterboxes.org"},
@@ -20,6 +20,7 @@ build-backend = "pdm.backend"
 
 [tool.pdm]
 distribution = true
+version = { source = "scm" }
 
 [dependency-groups]
 dev = [
