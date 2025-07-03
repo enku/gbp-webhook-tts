@@ -3,7 +3,7 @@ import os
 import tempfile
 from collections.abc import Mapping, MutableMapping
 from pathlib import Path
-from types import ModuleType
+from types import ModuleType as Module
 from unittest import mock
 
 from unittest_fixtures import FixtureContext, Fixtures, fixture
@@ -31,14 +31,14 @@ def tmpdir(_: Fixtures) -> FixtureContext[Path]:
 
 
 @fixture()
-def popen(_: Fixtures, target: ModuleType = handlers.sp) -> FixtureContext[Mock]:
+def popen(_: Fixtures, target: Module = handlers.sp) -> FixtureContext[Mock]:
     with mock.patch.object(target, "Popen") as mock_obj:
         yield mock_obj
 
 
 @fixture()
 def acquire_sound_file(
-    _: Fixtures, target: ModuleType = handlers.utils
+    _: Fixtures, target: Module = handlers.utils
 ) -> FixtureContext[Mock]:
     with mock.patch.object(target, "acquire_sound_file") as mock_obj:
         yield mock_obj
@@ -46,21 +46,19 @@ def acquire_sound_file(
 
 @fixture()
 def user_cache_path(
-    _: Fixtures, target: ModuleType = utils.platformdirs
+    _: Fixtures, target: Module = utils.platformdirs
 ) -> FixtureContext[Mock]:
     with mock.patch.object(target, "user_cache_path") as mock_obj:
         yield mock_obj
 
 
 @fixture()
-def event_to_speech(_: Fixtures, target: ModuleType = utils) -> FixtureContext[Mock]:
+def event_to_speech(_: Fixtures, target: Module = utils) -> FixtureContext[Mock]:
     with mock.patch.object(target, "event_to_speech") as mock_obj:
         yield mock_obj
 
 
 @fixture()
-def boto3_session(
-    _: Fixtures, target: ModuleType = utils.boto3
-) -> FixtureContext[Mock]:
+def boto3_session(_: Fixtures, target: Module = utils.boto3) -> FixtureContext[Mock]:
     with mock.patch.object(target, "Session") as mock_obj:
         yield mock_obj
