@@ -8,7 +8,7 @@ from unittest import mock
 
 from unittest_fixtures import FixtureContext, Fixtures, fixture
 
-from gbp_webhook_tts import handlers
+from gbp_webhook_tts import handlers, utils
 
 
 @fixture()
@@ -41,4 +41,12 @@ def acquire_sound_file(
     _fixtures: Fixtures, target: ModuleType = handlers.utils
 ) -> FixtureContext[mock.Mock]:
     with mock.patch.object(target, "acquire_sound_file") as mock_obj:
+        yield mock_obj
+
+
+@fixture()
+def user_cache_path(
+    _fixtures: Fixtures, target: ModuleType = utils.platformdirs
+) -> FixtureContext[mock.Mock]:
+    with mock.patch.object(target, "user_cache_path") as mock_obj:
         yield mock_obj

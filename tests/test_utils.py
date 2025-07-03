@@ -6,17 +6,17 @@ from unittest_fixtures import Fixtures, given
 
 from gbp_webhook_tts import utils
 
+from . import fixtures as tf
+
 EVENT = {"name": "build_pulled", "machine": "babette", "data": {}}
 
 
-@given("tmpdir")
+@given(tf.user_cache_path, tf.tmpdir)
 @mock.patch.object(utils, "event_to_speech")
-@mock.patch.object(utils.platformdirs, "user_cache_path")
 class AcquireSoundFileTests(TestCase):
-    def test(
-        self, user_cache_path: mock.Mock, event_to_speech: mock.Mock, fixtures: Fixtures
-    ) -> None:
+    def test(self, event_to_speech: mock.Mock, fixtures: Fixtures) -> None:
         tmpdir = fixtures.tmpdir
+        user_cache_path: mock.Mock = fixtures.user_cache_path
         user_cache_path.return_value = tmpdir
         event_to_speech.return_value = b"test"
         path = utils.acquire_sound_file(EVENT)
@@ -25,10 +25,9 @@ class AcquireSoundFileTests(TestCase):
         self.assertTrue(path.parent.is_dir())
         self.assertEqual(path.read_bytes(), b"test")
 
-    def test_makes_path(
-        self, user_cache_path: mock.Mock, event_to_speech: mock.Mock, fixtures: Fixtures
-    ) -> None:
+    def test_makes_path(self, event_to_speech: mock.Mock, fixtures: Fixtures) -> None:
         tmpdir = fixtures.tmpdir
+        user_cache_path: mock.Mock = fixtures.user_cache_path
         user_cache_path.return_value = tmpdir / "foo"
         event_to_speech.return_value = b"test"
         path = utils.acquire_sound_file(EVENT)
@@ -38,10 +37,11 @@ class AcquireSoundFileTests(TestCase):
         self.assertEqual(path.read_bytes(), b"test")
 
 
-@mock.patch.object(utils.platformdirs, "user_cache_path")
+@given(tf.user_cache_path, tf.tmpdir)
 class EventToPathTests(TestCase):
 
-    def test(self, user_cache_path: mock.Mock) -> None:
+    def test(self, fixtures: Fixtures) -> None:
+        user_cache_path: mock.Mock = fixtures.user_cache_path
         user_cache_path.return_value = Path("/dev/null")
         path = utils.event_to_path(EVENT)
 
