@@ -34,3 +34,11 @@ def popen(
 ) -> FixtureContext[mock.Mock]:
     with mock.patch.object(target, "Popen") as mock_obj:
         yield mock_obj
+
+
+@fixture()
+def acquire_sound_file(
+    _fixtures: Fixtures, target: ModuleType = handlers.utils
+) -> FixtureContext[mock.Mock]:
+    with mock.patch.object(target, "acquire_sound_file") as mock_obj:
+        yield mock_obj

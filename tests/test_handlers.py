@@ -8,10 +8,9 @@ from gbp_webhook_tts import handlers, utils
 from . import fixtures as tf
 
 
-@given(tf.popen)
-@mock.patch.object(handlers.utils, "acquire_sound_file")
+@given(tf.acquire_sound_file, tf.popen)
 class BuildPulledTests(TestCase):
-    def test(self, acquire_sound_file: mock.Mock, fixtures: Fixtures) -> None:
+    def test(self, fixtures: Fixtures) -> None:
         # Given the event
         event = {"name": "build_pulled", "machine": "babette", "data": {}}
 
@@ -19,6 +18,7 @@ class BuildPulledTests(TestCase):
         handlers.build_pulled(event)
 
         # Then the sound file for the event is acquired
+        acquire_sound_file: mock.Mock = fixtures.acquire_sound_file
         acquire_sound_file.assert_called_once_with(event)
 
         # And the sound file is played
