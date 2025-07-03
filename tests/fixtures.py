@@ -10,6 +10,8 @@ from unittest_fixtures import FixtureContext, Fixtures, fixture
 
 from gbp_webhook_tts import handlers, utils
 
+Mock = mock.Mock
+
 
 @fixture()
 def environ(
@@ -31,7 +33,7 @@ def tmpdir(_fixtures: Fixtures) -> FixtureContext[Path]:
 @fixture()
 def popen(
     _fixtures: Fixtures, target: ModuleType = handlers.sp
-) -> FixtureContext[mock.Mock]:
+) -> FixtureContext[Mock]:
     with mock.patch.object(target, "Popen") as mock_obj:
         yield mock_obj
 
@@ -39,7 +41,7 @@ def popen(
 @fixture()
 def acquire_sound_file(
     _fixtures: Fixtures, target: ModuleType = handlers.utils
-) -> FixtureContext[mock.Mock]:
+) -> FixtureContext[Mock]:
     with mock.patch.object(target, "acquire_sound_file") as mock_obj:
         yield mock_obj
 
@@ -47,7 +49,7 @@ def acquire_sound_file(
 @fixture()
 def user_cache_path(
     _fixtures: Fixtures, target: ModuleType = utils.platformdirs
-) -> FixtureContext[mock.Mock]:
+) -> FixtureContext[Mock]:
     with mock.patch.object(target, "user_cache_path") as mock_obj:
         yield mock_obj
 
@@ -55,7 +57,7 @@ def user_cache_path(
 @fixture()
 def event_to_speech(
     _fixtures: Fixtures, target: ModuleType = utils
-) -> FixtureContext[mock.Mock]:
+) -> FixtureContext[Mock]:
     with mock.patch.object(target, "event_to_speech") as mock_obj:
         yield mock_obj
 
@@ -63,6 +65,6 @@ def event_to_speech(
 @fixture()
 def boto3_session(
     _fixtures: Fixtures, target: ModuleType = utils.boto3
-) -> FixtureContext[mock.Mock]:
+) -> FixtureContext[Mock]:
     with mock.patch.object(target, "Session") as mock_obj:
         yield mock_obj
