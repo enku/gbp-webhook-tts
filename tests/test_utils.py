@@ -14,7 +14,9 @@ EVENT = {"name": "build_pulled", "machine": "babette", "data": {}}
 @given(tf.user_cache_path, tf.tmpdir)
 @mock.patch.object(utils, "event_to_speech")
 class AcquireSoundFileTests(TestCase):
-    def test(self, event_to_speech: mock.Mock, fixtures: Fixtures) -> None:
+    def test_creates_file_when_doesnot_exist(
+        self, event_to_speech: mock.Mock, fixtures: Fixtures
+    ) -> None:
         tmpdir = fixtures.tmpdir
         user_cache_path: mock.Mock = fixtures.user_cache_path
         user_cache_path.return_value = tmpdir
