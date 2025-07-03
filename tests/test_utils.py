@@ -65,13 +65,13 @@ class EventToPathTests(TestCase):
         self.assertEqual(Path("/dev/null/tts/babette.mp3"), path)
 
 
-@mock.patch.object(utils.boto3, "Session")
+@given(tf.boto3_session)
 class EventToSpeechTests(TestCase):
-
-    def test(self, session_cls: mock.Mock) -> None:
+    def test(self, fixtures: Fixtures) -> None:
         text = utils.get_speech_text_for_machine("babette")
         audio = utils.event_to_speech(EVENT)
 
+        session_cls: mock.Mock = fixtures.boto3_session
         session = session_cls.return_value
         session.client.assert_called_once_with("polly")
         polly = session.client.return_value

@@ -58,3 +58,11 @@ def event_to_speech(
 ) -> FixtureContext[mock.Mock]:
     with mock.patch.object(target, "event_to_speech") as mock_obj:
         yield mock_obj
+
+
+@fixture()
+def boto3_session(
+    _fixtures: Fixtures, target: ModuleType = utils.boto3
+) -> FixtureContext[mock.Mock]:
+    with mock.patch.object(target, "Session") as mock_obj:
+        yield mock_obj
