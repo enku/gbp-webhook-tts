@@ -38,6 +38,24 @@ class AcquireSoundFileTests(TestCase):
         self.assertTrue(path.parent.is_dir())
         self.assertEqual(path.read_bytes(), b"test")
 
+    def test_returns_file_when_already_exists(
+        self, event_to_speech: mock.Mock, fixtures: Fixtures
+    ) -> None:
+        # Given the existing sound file for the event's machine
+        tmpdir = fixtures.tmpdir
+        user_cache_path: mock.Mock = fixtures.user_cache_path
+        user_cache_path.return_value = tmpdir
+        existing_path = tmpdir / "tts" / "babette.mp3"
+        existing_path.parent.mkdir()
+        existing_path.write_bytes(b"test")
+
+        # When acquire_sound_file is called
+        path = utils.acquire_sound_file(EVENT)
+
+        # Then the exising file is returned
+        self.assertEqual(path, existing_path)
+        self.assertEqual(path.read_bytes(), b"test")
+
 
 @given(tf.user_cache_path, tf.tmpdir)
 class EventToPathTests(TestCase):
