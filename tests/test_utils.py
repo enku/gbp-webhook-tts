@@ -82,7 +82,7 @@ class EventToSpeechTests(TestCase):
         self.assertEqual(speech["AudioStream"].read.return_value, audio)
 
 
-@given("environ")
+@given(tf.environ)
 class GetSpeechTextForMachineTests(TestCase):
     def test(self, fixtures: Fixtures) -> None:
         environ = fixtures.environ
@@ -106,7 +106,7 @@ class GetSpeechTextForMachineTests(TestCase):
         )
 
 
-@given("environ")
+@given(tf.environ)
 class MapMachineToTextTests(TestCase):
     def test(self, fixtures: Fixtures) -> None:
         environ = fixtures.environ
@@ -118,7 +118,7 @@ class MapMachineToTextTests(TestCase):
         self.assertEqual(None, utils.map_machine_to_text("kde-desktop"))
 
 
-@given("environ")
+@given(tf.environ)
 class GetSoundFileTests(TestCase):
     def test(self, fixtures: Fixtures) -> None:
         environ = fixtures.environ
