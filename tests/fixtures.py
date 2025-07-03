@@ -50,3 +50,11 @@ def user_cache_path(
 ) -> FixtureContext[mock.Mock]:
     with mock.patch.object(target, "user_cache_path") as mock_obj:
         yield mock_obj
+
+
+@fixture()
+def event_to_speech(
+    _fixtures: Fixtures, target: ModuleType = utils
+) -> FixtureContext[mock.Mock]:
+    with mock.patch.object(target, "event_to_speech") as mock_obj:
+        yield mock_obj
