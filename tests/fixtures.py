@@ -3,9 +3,12 @@ import os
 import tempfile
 from collections.abc import Mapping, MutableMapping
 from pathlib import Path
+from types import ModuleType
 from unittest import mock
 
 from unittest_fixtures import FixtureContext, Fixtures, fixture
+
+from gbp_webhook_tts import handlers
 
 
 @fixture()
@@ -23,3 +26,11 @@ def environ(
 def tmpdir(_fixtures: Fixtures) -> FixtureContext[Path]:
     with tempfile.TemporaryDirectory() as tempdir:
         yield Path(tempdir)
+
+
+@fixture()
+def popen(
+    _fixtures: Fixtures, target: ModuleType = handlers.sp
+) -> FixtureContext[mock.Mock]:
+    with mock.patch.object(target, "Popen") as mock_obj:
+        yield mock_obj
