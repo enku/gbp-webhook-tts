@@ -41,12 +41,11 @@ def event_to_speech(event: dict[str, Any]) -> bytes:
 
 def get_speech_text_for_machine(machine: str) -> str:
     """Given the machine name, return the text for speech"""
-    template = load_template("build_pulled.ssml")
     context = {
         "machine": map_machine_to_text(machine) or machine.replace("-", " "),
         "delay": environ.get("GBP_WEBHOOK_TTS_DELAY", "0"),
     }
-    return render_template(template, context)
+    return render_template(load_template("build_pulled.ssml"), context)
 
 
 def map_machine_to_text(machine: str) -> str | None:
