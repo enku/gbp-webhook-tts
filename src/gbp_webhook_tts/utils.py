@@ -16,9 +16,8 @@ def acquire_sound_file(event: dict[str, Any]) -> Path:
     """Acquire the audio file needed for the event and return the path"""
     path: Path = event_to_path(event)
     if not path.exists():
-        audio = event_to_speech(event)
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_bytes(audio)
+        path.write_bytes(event_to_speech(event))
     return path
 
 
