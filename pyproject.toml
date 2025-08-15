@@ -22,8 +22,8 @@ requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
 [tool.coverage.run]
-source = ["gbp_webhook_tts"]
-omit = []
+source = ["gbp_webhook_tts", "tests"]
+omit = ["tests/__main__.py"]
 
 [tool.pdm]
 distribution = true
