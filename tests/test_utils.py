@@ -6,12 +6,12 @@ from unittest_fixtures import Fixtures, given
 
 from gbp_webhook_tts import utils
 
-from . import fixtures as tf
+from . import lib
 
 EVENT = {"name": "build_pulled", "machine": "babette", "data": {}}
 
 
-@given(tf.user_cache_path, tf.tmpdir, tf.event_to_speech)
+@given(lib.user_cache_path, lib.tmpdir, lib.event_to_speech)
 class AcquireSoundFileTests(TestCase):
     def test_creates_file_when_doesnot_exist(self, fixtures: Fixtures) -> None:
         tmpdir = fixtures.tmpdir
@@ -54,7 +54,7 @@ class AcquireSoundFileTests(TestCase):
         self.assertEqual(path.read_bytes(), b"test")
 
 
-@given(tf.user_cache_path, tf.tmpdir)
+@given(lib.user_cache_path, lib.tmpdir)
 class EventToPathTests(TestCase):
 
     def test(self, fixtures: Fixtures) -> None:
@@ -65,7 +65,7 @@ class EventToPathTests(TestCase):
         self.assertEqual(Path("/dev/null/tts/babette.mp3"), path)
 
 
-@given(tf.boto3_session)
+@given(lib.boto3_session)
 class EventToSpeechTests(TestCase):
     def test(self, fixtures: Fixtures) -> None:
         text = utils.get_speech_text_for_machine("babette")
@@ -82,7 +82,7 @@ class EventToSpeechTests(TestCase):
         self.assertEqual(speech["AudioStream"].read.return_value, audio)
 
 
-@given(tf.environ)
+@given(lib.environ)
 class GetSpeechTextForMachineTests(TestCase):
     def test(self, fixtures: Fixtures) -> None:
         environ = fixtures.environ
@@ -106,7 +106,7 @@ class GetSpeechTextForMachineTests(TestCase):
         )
 
 
-@given(tf.environ)
+@given(lib.environ)
 class MapMachineToTextTests(TestCase):
     def test(self, fixtures: Fixtures) -> None:
         environ = fixtures.environ
@@ -118,7 +118,7 @@ class MapMachineToTextTests(TestCase):
         self.assertEqual(None, utils.map_machine_to_text("kde-desktop"))
 
 
-@given(tf.environ)
+@given(lib.environ)
 class GetSoundFileTests(TestCase):
     def test(self, fixtures: Fixtures) -> None:
         environ = fixtures.environ

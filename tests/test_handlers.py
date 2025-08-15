@@ -5,10 +5,10 @@ from unittest_fixtures import Fixtures, given
 
 from gbp_webhook_tts import handlers, utils
 
-from . import fixtures as tf
+from . import lib
 
 
-@given(tf.acquire_sound_file, tf.popen)
+@given(lib.acquire_sound_file, lib.popen)
 class BuildPulledTests(TestCase):
     def test(self, fixtures: Fixtures) -> None:
         # Given the event
