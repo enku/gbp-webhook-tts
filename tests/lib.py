@@ -1,6 +1,4 @@
 # pylint: disable=missing-docstring,redefined-outer-name
-import os
-from collections.abc import Mapping, MutableMapping
 from types import ModuleType as Module
 from unittest import mock
 
@@ -10,17 +8,6 @@ from gbp_webhook_tts import handlers, utils
 
 FC = FixtureContext
 Mock = mock.Mock
-
-
-@fixture()
-def environ(
-    _: Fixtures, *, environ: Mapping[str, str] | None = None
-) -> FC[MutableMapping[str, str]]:
-    environ = environ or {}
-
-    with mock.patch.dict(os.environ, clear=True):
-        os.environ.update(environ)
-        yield os.environ
 
 
 @fixture()

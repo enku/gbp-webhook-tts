@@ -1,9 +1,10 @@
 # pylint: disable=missing-docstring,unused-argument
+import os
 from pathlib import Path
 from unittest import TestCase, mock
 
 from gbp_testkit import fixtures as testkit
-from unittest_fixtures import Fixtures, given
+from unittest_fixtures import Fixtures, given, where
 
 from gbp_webhook_tts import utils
 
@@ -83,11 +84,11 @@ class EventToSpeechTests(TestCase):
         self.assertEqual(speech["AudioStream"].read.return_value, audio)
 
 
-@given(lib.environ)
+@given(testkit.environ)
+@where(environ__clear=True)
 class GetSpeechTextForMachineTests(TestCase):
     def test(self, fixtures: Fixtures) -> None:
-        environ = fixtures.environ
-        environ["GBP_WEBHOOK_TTS_PHONETIC_KDE_DESKTOP"] = "foobar"
+        os.environ["GBP_WEBHOOK_TTS_PHONETIC_KDE_DESKTOP"] = "foobar"
 
         self.assertEqual(
             ssml("foobar", 0), utils.get_speech_text_for_machine("kde-desktop")
@@ -99,19 +100,18 @@ class GetSpeechTextForMachineTests(TestCase):
         )
 
     def test_with_delay(self, fixtures: Fixtures) -> None:
-        environ = fixtures.environ
-        environ["GBP_WEBHOOK_TTS_DELAY"] = "0.8"
+        os.environ["GBP_WEBHOOK_TTS_DELAY"] = "0.8"
 
         self.assertEqual(
             ssml("kde desktop", 0.8), utils.get_speech_text_for_machine("kde-desktop")
         )
 
 
-@given(lib.environ)
+@given(testkit.environ)
+@where(environ__clear=True)
 class MapMachineToTextTests(TestCase):
     def test(self, fixtures: Fixtures) -> None:
-        environ = fixtures.environ
-        environ["GBP_WEBHOOK_TTS_PHONETIC_KDE_DESKTOP"] = "foobar"
+        os.environ["GBP_WEBHOOK_TTS_PHONETIC_KDE_DESKTOP"] = "foobar"
 
         self.assertEqual("foobar", utils.map_machine_to_text("kde-desktop"))
 
@@ -119,11 +119,11 @@ class MapMachineToTextTests(TestCase):
         self.assertEqual(None, utils.map_machine_to_text("kde-desktop"))
 
 
-@given(lib.environ)
+@given(testkit.environ)
+@where(environ__clear=True)
 class GetSoundFileTests(TestCase):
     def test(self, fixtures: Fixtures) -> None:
-        environ = fixtures.environ
-        environ["GBP_WEBHOOK_PLAYSOUND_PLAYER"] = "blahblahblah blah"
+        os.environ["GBP_WEBHOOK_PLAYSOUND_PLAYER"] = "blahblahblah blah"
 
         self.assertEqual(["blahblahblah", "blah"], utils.get_sound_player())
 
