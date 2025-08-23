@@ -4,16 +4,10 @@ from unittest import mock
 
 from unittest_fixtures import FixtureContext, Fixtures, fixture
 
-from gbp_webhook_tts import handlers, utils
+from gbp_webhook_tts import utils
 
 FC = FixtureContext
 Mock = mock.Mock
-
-
-@fixture()
-def acquire_sound_file(_: Fixtures, target: Module = handlers.utils) -> FC[Mock]:
-    with mock.patch.object(target, "acquire_sound_file") as mock_obj:
-        yield mock_obj
 
 
 @fixture()

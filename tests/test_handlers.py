@@ -6,11 +6,10 @@ from unittest_fixtures import Fixtures, given, where
 
 from gbp_webhook_tts import handlers, utils
 
-from . import lib
 
-
-@given(lib.acquire_sound_file, popen=testkit.patch)
+@given(acquire_sound_file=testkit.patch, popen=testkit.patch)
 @where(popen__target="subprocess.Popen")
+@where(acquire_sound_file__target="gbp_webhook_tts.handlers.utils.acquire_sound_file")
 class BuildPulledTests(TestCase):
     def test(self, fixtures: Fixtures) -> None:
         # Given the event
