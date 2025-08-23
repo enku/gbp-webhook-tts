@@ -11,12 +11,6 @@ Mock = mock.Mock
 
 
 @fixture()
-def user_cache_path(_: Fixtures, target: Module = utils.platformdirs) -> FC[Mock]:
-    with mock.patch.object(target, "user_cache_path") as mock_obj:
-        yield mock_obj
-
-
-@fixture()
 def event_to_speech(_: Fixtures, target: Module = utils) -> FC[Mock]:
     with mock.patch.object(target, "event_to_speech") as mock_obj:
         yield mock_obj

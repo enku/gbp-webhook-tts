@@ -1,7 +1,7 @@
 # pylint: disable=missing-docstring,unused-argument
 import os
 from pathlib import Path
-from unittest import TestCase, mock
+from unittest import TestCase
 
 from gbp_testkit import fixtures as testkit
 from unittest_fixtures import Fixtures, given, where
@@ -13,13 +13,14 @@ from . import lib
 EVENT = {"name": "build_pulled", "machine": "babette", "data": {}}
 
 
-@given(lib.user_cache_path, testkit.tmpdir, lib.event_to_speech)
+@given(testkit.tmpdir, lib.event_to_speech, user_cache_path=testkit.patch)
+@where(user_cache_path__target="gbp_webhook_tts.utils.platformdirs.user_cache_path")
 class AcquireSoundFileTests(TestCase):
     def test_creates_file_when_doesnot_exist(self, fixtures: Fixtures) -> None:
         tmpdir = fixtures.tmpdir
-        user_cache_path: mock.Mock = fixtures.user_cache_path
+        user_cache_path = fixtures.user_cache_path
         user_cache_path.return_value = tmpdir
-        event_to_speech: mock.Mock = fixtures.event_to_speech
+        event_to_speech = fixtures.event_to_speech
         event_to_speech.return_value = b"test"
         path = utils.acquire_sound_file(EVENT)
 
@@ -29,9 +30,9 @@ class AcquireSoundFileTests(TestCase):
 
     def test_makes_path(self, fixtures: Fixtures) -> None:
         tmpdir = fixtures.tmpdir
-        user_cache_path: mock.Mock = fixtures.user_cache_path
+        user_cache_path = fixtures.user_cache_path
         user_cache_path.return_value = tmpdir / "foo"
-        event_to_speech: mock.Mock = fixtures.event_to_speech
+        event_to_speech = fixtures.event_to_speech
         event_to_speech.return_value = b"test"
         path = utils.acquire_sound_file(EVENT)
 
@@ -42,7 +43,7 @@ class AcquireSoundFileTests(TestCase):
     def test_returns_file_when_already_exists(self, fixtures: Fixtures) -> None:
         # Given the existing sound file for the event's machine
         tmpdir = fixtures.tmpdir
-        user_cache_path: mock.Mock = fixtures.user_cache_path
+        user_cache_path = fixtures.user_cache_path
         user_cache_path.return_value = tmpdir
         existing_path = tmpdir / "tts" / "babette.mp3"
         existing_path.parent.mkdir()
@@ -56,11 +57,12 @@ class AcquireSoundFileTests(TestCase):
         self.assertEqual(path.read_bytes(), b"test")
 
 
-@given(lib.user_cache_path, testkit.tmpdir)
+@given(testkit.tmpdir, user_cache_path=testkit.patch)
+@where(user_cache_path__target="gbp_webhook_tts.utils.platformdirs.user_cache_path")
 class EventToPathTests(TestCase):
 
     def test(self, fixtures: Fixtures) -> None:
-        user_cache_path: mock.Mock = fixtures.user_cache_path
+        user_cache_path = fixtures.user_cache_path
         user_cache_path.return_value = Path("/dev/null")
         path = utils.event_to_path(EVENT)
 
@@ -73,7 +75,7 @@ class EventToSpeechTests(TestCase):
         text = utils.get_speech_text_for_machine("babette")
         audio = utils.event_to_speech(EVENT)
 
-        session_cls: mock.Mock = fixtures.boto3_session
+        session_cls = fixtures.boto3_session
         session = session_cls.return_value
         session.client.assert_called_once_with("polly")
         polly = session.client.return_value
