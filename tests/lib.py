@@ -1,8 +1,6 @@
 # pylint: disable=missing-docstring,redefined-outer-name
 import os
-import tempfile
 from collections.abc import Mapping, MutableMapping
-from pathlib import Path
 from types import ModuleType as Module
 from unittest import mock
 
@@ -23,12 +21,6 @@ def environ(
     with mock.patch.dict(os.environ, clear=True):
         os.environ.update(environ)
         yield os.environ
-
-
-@fixture()
-def tmpdir(_: Fixtures) -> FC[Path]:
-    with tempfile.TemporaryDirectory() as tempdir:
-        yield Path(tempdir)
 
 
 @fixture()

@@ -2,6 +2,7 @@
 from pathlib import Path
 from unittest import TestCase, mock
 
+from gbp_testkit import fixtures as testkit
 from unittest_fixtures import Fixtures, given
 
 from gbp_webhook_tts import utils
@@ -11,7 +12,7 @@ from . import lib
 EVENT = {"name": "build_pulled", "machine": "babette", "data": {}}
 
 
-@given(lib.user_cache_path, lib.tmpdir, lib.event_to_speech)
+@given(lib.user_cache_path, testkit.tmpdir, lib.event_to_speech)
 class AcquireSoundFileTests(TestCase):
     def test_creates_file_when_doesnot_exist(self, fixtures: Fixtures) -> None:
         tmpdir = fixtures.tmpdir
@@ -54,7 +55,7 @@ class AcquireSoundFileTests(TestCase):
         self.assertEqual(path.read_bytes(), b"test")
 
 
-@given(lib.user_cache_path, lib.tmpdir)
+@given(lib.user_cache_path, testkit.tmpdir)
 class EventToPathTests(TestCase):
 
     def test(self, fixtures: Fixtures) -> None:
