@@ -1,12 +1,14 @@
 """Run tests for gbpcli"""
 
 import argparse
+import os
 import unittest
 
 
 def main() -> None:
     """Program entry point"""
     args = parse_args()
+    os.environ["DJANGO_SETTINGS_MODULE"] = args.settings
 
     loader = unittest.TestLoader()
     loader.testNamePatterns = [f"*{pattern}*" for pattern in args.tests] or None
@@ -20,7 +22,9 @@ def main() -> None:
 
 def parse_args() -> argparse.Namespace:
     """Parse command-line arguments"""
+    default_settings = os.environ.get("DJANGO_SETTINGS_MODULE", "gbp_testkit.settings")
     parser = argparse.ArgumentParser()
+    parser.add_argument("--settings", default=default_settings)
     parser.add_argument("-f", "--failfast", action="store_true", default=False)
     parser.add_argument("-v", "--verbose", action="store_true", default=False)
     parser.add_argument("tests", nargs="*", default=[])

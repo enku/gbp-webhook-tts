@@ -38,4 +38,5 @@ dev = [
     "boto3-stubs>=1.37.34",
     "unittest-fixtures>=1.0.0",
     "coverage>=7.9.1",
+    "gentoo-build-publisher[test] @ git+https://github.com/enku/gentoo-build-publisher.git@master",
 ]
