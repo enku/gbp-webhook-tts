@@ -8,8 +8,6 @@ from unittest_fixtures import Fixtures, given, where
 
 from gbp_webhook_tts import utils
 
-from . import lib
-
 EVENT = {"name": "build_pulled", "machine": "babette", "data": {}}
 
 
@@ -70,7 +68,8 @@ class EventToPathTests(TestCase):
         self.assertEqual(Path("/dev/null/tts/babette.mp3"), path)
 
 
-@given(lib.boto3_session)
+@given(boto3_session=testkit.patch)
+@where(boto3_session__target="gbp_webhook_tts.utils.boto3.Session")
 class EventToSpeechTests(TestCase):
     def test(self, fixtures: Fixtures) -> None:
         text = utils.get_speech_text_for_machine("babette")
