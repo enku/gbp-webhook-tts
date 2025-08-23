@@ -13,8 +13,9 @@ from . import lib
 EVENT = {"name": "build_pulled", "machine": "babette", "data": {}}
 
 
-@given(testkit.tmpdir, lib.event_to_speech, user_cache_path=testkit.patch)
+@given(testkit.tmpdir, user_cache_path=testkit.patch, event_to_speech=testkit.patch)
 @where(user_cache_path__target="gbp_webhook_tts.utils.platformdirs.user_cache_path")
+@where(event_to_speech__target="gbp_webhook_tts.utils.event_to_speech")
 class AcquireSoundFileTests(TestCase):
     def test_creates_file_when_doesnot_exist(self, fixtures: Fixtures) -> None:
         tmpdir = fixtures.tmpdir

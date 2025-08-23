@@ -11,12 +11,6 @@ Mock = mock.Mock
 
 
 @fixture()
-def event_to_speech(_: Fixtures, target: Module = utils) -> FC[Mock]:
-    with mock.patch.object(target, "event_to_speech") as mock_obj:
-        yield mock_obj
-
-
-@fixture()
 def boto3_session(_: Fixtures, target: Module = utils.boto3) -> FC[Mock]:
     with mock.patch.object(target, "Session") as mock_obj:
         yield mock_obj
