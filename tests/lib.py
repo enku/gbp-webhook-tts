@@ -11,12 +11,6 @@ Mock = mock.Mock
 
 
 @fixture()
-def popen(_: Fixtures, target: Module = handlers.sp) -> FC[Mock]:
-    with mock.patch.object(target, "Popen") as mock_obj:
-        yield mock_obj
-
-
-@fixture()
 def acquire_sound_file(_: Fixtures, target: Module = handlers.utils) -> FC[Mock]:
     with mock.patch.object(target, "acquire_sound_file") as mock_obj:
         yield mock_obj

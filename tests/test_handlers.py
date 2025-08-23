@@ -1,14 +1,16 @@
 # pylint: disable=missing-docstring
 from unittest import TestCase, mock
 
-from unittest_fixtures import Fixtures, given
+import gbp_testkit.fixtures as testkit
+from unittest_fixtures import Fixtures, given, where
 
 from gbp_webhook_tts import handlers, utils
 
 from . import lib
 
 
-@given(lib.acquire_sound_file, lib.popen)
+@given(lib.acquire_sound_file, popen=testkit.patch)
+@where(popen__target="subprocess.Popen")
 class BuildPulledTests(TestCase):
     def test(self, fixtures: Fixtures) -> None:
         # Given the event
