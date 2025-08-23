@@ -1,5 +1,5 @@
 # pylint: disable=missing-docstring
-from unittest import TestCase, mock
+from unittest import TestCase
 
 import gbp_testkit.fixtures as testkit
 from unittest_fixtures import Fixtures, given, where
@@ -19,11 +19,11 @@ class BuildPulledTests(TestCase):
         handlers.build_pulled(event)
 
         # Then the sound file for the event is acquired
-        acquire_sound_file: mock.Mock = fixtures.acquire_sound_file
+        acquire_sound_file = fixtures.acquire_sound_file
         acquire_sound_file.assert_called_once_with(event)
 
         # And the sound file is played
         player = utils.get_sound_player()
         sound_file = acquire_sound_file.return_value
-        popen_cls: mock.Mock = fixtures.popen
+        popen_cls = fixtures.popen
         popen_cls.assert_called_once_with([*player, str(sound_file)])
