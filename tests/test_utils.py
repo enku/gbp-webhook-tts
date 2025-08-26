@@ -3,7 +3,7 @@ import os
 from unittest import TestCase
 
 from gbp_testkit import fixtures as testkit
-from unittest_fixtures import Fixtures, given, where
+from unittest_fixtures import Fixtures, Param, given, where
 
 from gbp_webhook_tts import utils
 
@@ -12,12 +12,11 @@ EVENT = {"name": "build_pulled", "machine": "babette", "data": {}}
 
 @given(testkit.tmpdir, user_cache_path=testkit.patch, event_to_speech=testkit.patch)
 @where(user_cache_path__target="gbp_webhook_tts.utils.platformdirs.user_cache_path")
+@where(user_cache_path__return_value=Param(lambda f: f.tmpdir))
 @where(event_to_speech__target="gbp_webhook_tts.utils.event_to_speech")
+@where(event_to_speech__return_value=b"test")
 class AcquireSoundFileTests(TestCase):
     def test_creates_file_when_doesnot_exist(self, fixtures: Fixtures) -> None:
-        fixtures.user_cache_path.return_value = fixtures.tmpdir
-        fixtures.event_to_speech.return_value = b"test"
-
         path = utils.acquire_sound_file(EVENT)
 
         self.assertEqual(fixtures.tmpdir / "tts" / "babette.mp3", path)
@@ -26,7 +25,6 @@ class AcquireSoundFileTests(TestCase):
 
     def test_makes_path(self, fixtures: Fixtures) -> None:
         fixtures.user_cache_path.return_value = fixtures.tmpdir / "foo"
-        fixtures.event_to_speech.return_value = b"test"
         path = utils.acquire_sound_file(EVENT)
 
         self.assertEqual(fixtures.tmpdir / "foo" / "tts" / "babette.mp3", path)
@@ -35,7 +33,6 @@ class AcquireSoundFileTests(TestCase):
 
     def test_returns_file_when_already_exists(self, fixtures: Fixtures) -> None:
         # Given the existing sound file for the event's machine
-        fixtures.user_cache_path.return_value = fixtures.tmpdir
         existing_path = fixtures.tmpdir / "tts" / "babette.mp3"
         existing_path.parent.mkdir()
         existing_path.write_bytes(b"test")
@@ -50,10 +47,10 @@ class AcquireSoundFileTests(TestCase):
 
 @given(testkit.tmpdir, user_cache_path=testkit.patch)
 @where(user_cache_path__target="gbp_webhook_tts.utils.platformdirs.user_cache_path")
+@where(user_cache_path__return_value=Param(lambda f: f.tmpdir))
 class EventToPathTests(TestCase):
 
     def test(self, fixtures: Fixtures) -> None:
-        fixtures.user_cache_path.return_value = fixtures.tmpdir
         path = utils.event_to_path(EVENT)
 
         self.assertEqual(f"{fixtures.tmpdir}/tts/babette.mp3", str(path))
