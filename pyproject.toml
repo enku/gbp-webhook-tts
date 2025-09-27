@@ -11,7 +11,7 @@ readme = "README.md"
 license = {text = "GPL3+"}
 
 [project.entry-points."gbp_webhook.handlers"]
-build_pulled = "gbp_webhook_tts.handlers:build_pulled"
+postpull = "gbp_webhook_tts.handlers:postpull"
 
 [project.urls]
 homepage = "https://github.com/enku/gbp-webhook-tts"

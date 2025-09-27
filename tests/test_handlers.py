@@ -10,13 +10,13 @@ from gbp_webhook_tts import handlers, utils
 @given(acquire_sound_file=testkit.patch, popen=testkit.patch)
 @where(popen__target="subprocess.Popen")
 @where(acquire_sound_file__target="gbp_webhook_tts.handlers.utils.acquire_sound_file")
-class BuildPulledTests(TestCase):
+class PostPullTests(TestCase):
     def test(self, fixtures: Fixtures) -> None:
         # Given the event
-        event = {"name": "build_pulled", "machine": "babette", "data": {}}
+        event = {"name": "postpull", "machine": "babette", "data": {}}
 
-        # When build_pulled is called with the event
-        handlers.build_pulled(event)
+        # When postpull is called with the event
+        handlers.postpull(event)
 
         # Then the sound file for the event is acquired
         acquire_sound_file = fixtures.acquire_sound_file

@@ -45,7 +45,7 @@ def get_speech_text_for_machine(machine: str) -> str:
         "machine": map_machine_to_text(machine) or machine.replace("-", " "),
         "delay": environ.get("GBP_WEBHOOK_TTS_DELAY", "0"),
     }
-    return render_template(load_template("build_pulled.ssml"), context)
+    return render_template(load_template("postpull.ssml"), context)
 
 
 def map_machine_to_text(machine: str) -> str | None:

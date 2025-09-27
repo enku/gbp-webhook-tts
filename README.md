@@ -27,7 +27,7 @@ $ pipx inject gbpcli gbp-webhook-tts
 You should ensure that gbp-notifications is installed on the [Gentoo Build
 Publisher](https://github.com/enku/gentoo-build-publisher) server for which
 you want to subscribe and the webhook receiver is configured to receive
-`build_pulled` events.
+`postpull` events.
 
 This plugin uses [AWS Polly](https://aws.amazon.com/polly/) to convert text to
 to speech. As such it requires you to have an AWS account and an access
@@ -51,7 +51,7 @@ AWS_DEFAULT_REGION=us-east-2
 laptop = { webhook = "https://laptop:5000/webhook|X-Pre-Shared-Key=foobar" }
 
 [subscriptions]
-babette = { build_pulled = ["laptop"] }
+babette = { postpull = ["laptop"] }
 ```
 
 As gbp-webhook-tts is a plugin for gbp-webhook, it is picked up automatically

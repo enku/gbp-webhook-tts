@@ -7,7 +7,7 @@ from unittest_fixtures import Fixtures, Param, given, where
 
 from gbp_webhook_tts import utils
 
-EVENT = {"name": "build_pulled", "machine": "babette", "data": {}}
+EVENT = {"name": "postpull", "machine": "babette", "data": {}}
 
 
 @given(testkit.tmpdir, user_cache_path=testkit.patch, event_to_speech=testkit.patch)
