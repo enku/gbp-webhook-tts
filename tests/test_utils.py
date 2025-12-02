@@ -56,8 +56,8 @@ class EventToPathTests(TestCase):
         self.assertEqual(f"{fixtures.tmpdir}/tts/babette.mp3", str(path))
 
 
-@given(boto3_session=testkit.patch)
-@where(boto3_session__target="gbp_webhook_tts.utils.boto3.Session")
+@given(testkit.environ, boto3_session=testkit.patch)
+@where(boto3_session__target="gbp_webhook_tts.utils.boto3.Session", environ__clear=True)
 class EventToSpeechTests(TestCase):
     def test(self, fixtures: Fixtures) -> None:
         text = utils.get_speech_text_for_machine("babette")
@@ -71,6 +71,19 @@ class EventToSpeechTests(TestCase):
         )
         speech = polly.synthesize_speech.return_value
         self.assertEqual(speech["AudioStream"].read.return_value, audio)
+
+    def test_custom_voice(self, fixtures: Fixtures) -> None:
+        environ = fixtures.environ
+        environ["GBP_WEBHOOK_TTS_VOICE"] = "Goofy"
+        session = fixtures.boto3_session.return_value
+
+        utils.event_to_speech(EVENT)
+
+        text = utils.get_speech_text_for_machine("babette")
+        polly = session.client.return_value
+        polly.synthesize_speech.assert_called_once_with(
+            VoiceId="Goofy", OutputFormat="mp3", Text=text, TextType="ssml"
+        )
 
 
 @given(testkit.environ)
