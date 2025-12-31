@@ -8,6 +8,11 @@ from unittest_fixtures import Fixtures, Param, given, where
 from gbp_webhook_tts import utils
 
 EVENT = {"name": "postpull", "machine": "babette", "data": {}}
+SSML = """\
+<speak>
+  <break time="{delay}s"/>
+  {text}
+</speak>"""
 
 
 @given(testkit.tmpdir, user_cache_path=testkit.patch, event_to_speech=testkit.patch)
@@ -93,19 +98,22 @@ class GetSpeechTextForMachineTests(TestCase):
         os.environ["GBP_WEBHOOK_TTS_PHONETIC_KDE_DESKTOP"] = "foobar"
 
         self.assertEqual(
-            ssml("foobar", 0), utils.get_speech_text_for_machine("kde-desktop")
+            SSML.format(text="foobar", delay=0),
+            utils.get_speech_text_for_machine("kde-desktop"),
         )
 
     def test_default(self, fixtures: Fixtures) -> None:
         self.assertEqual(
-            ssml("kde desktop", 0), utils.get_speech_text_for_machine("kde-desktop")
+            SSML.format(text="kde desktop", delay=0),
+            utils.get_speech_text_for_machine("kde-desktop"),
         )
 
     def test_with_delay(self, fixtures: Fixtures) -> None:
         os.environ["GBP_WEBHOOK_TTS_DELAY"] = "0.8"
 
         self.assertEqual(
-            ssml("kde desktop", 0.8), utils.get_speech_text_for_machine("kde-desktop")
+            SSML.format(text="kde desktop", delay=0.8),
+            utils.get_speech_text_for_machine("kde-desktop"),
         )
 
 
@@ -131,11 +139,3 @@ class GetSoundFileTests(TestCase):
 
     def test_default(self, fixtures: Fixtures) -> None:
         self.assertEqual(["pw-play"], utils.get_sound_player())
-
-
-def ssml(text: str, delay: float) -> str:
-    return f"""\
-<speak>
-  <break time="{delay}s"/>
-  {text}
-</speak>"""
